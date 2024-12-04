@@ -123,7 +123,7 @@ class VisDroneInference:
 
 def main():
     # Configuration
-    MODEL_PATH = "visdrone_model_quant_edgetpu.tflite"
+    MODEL_PATH = "visdrone_model_edge_tpu.tflite"
     IMAGE_DIR = "test_images"
     OUTPUT_DIR = "inference_results"
 
