@@ -64,11 +64,15 @@ class CoralInference:
 
         inference_time = time.perf_counter() - start_time
 
+        # Count only high-confidence detections
+        confident_detections = sum(1 for score in scores if score > 0.5)
+
         return {
             "boxes": boxes,
             "classes": classes,
             "scores": scores,
-            "count": count,
+            "total_possible_detections": count,
+            "confident_detections": confident_detections,
             "inference_time": inference_time,
         }
 
@@ -83,7 +87,10 @@ class CoralInference:
         with open(output_path, "w") as f:
             f.write(f"Results for image: {base_image_name}\n")
             f.write(f"Inference time: {results['inference_time']*1000:.2f}ms\n")
-            f.write(f"Number of detections: {results['count']}\n\n")
+            f.write(f"High confidence detections: {results['confident_detections']}\n")
+            f.write(
+                f"(Out of {results['total_possible_detections']} possible detection slots)\n\n"
+            )
 
             for i in range(results["count"]):
                 if results["scores"][i] > 0.5:  # Filter low confidence detections
