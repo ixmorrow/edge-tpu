@@ -92,7 +92,7 @@ class CoralInference:
                 f"(Out of {results['total_possible_detections']} possible detection slots)\n\n"
             )
 
-            for i in range(results["count"]):
+            for i in range(results["total_possible_detections"]):
                 if results["scores"][i] > 0.5:  # Filter low confidence detections
                     class_id = int(results["classes"][i])
                     f.write(f"Detection {i+1}:\n")
@@ -133,7 +133,6 @@ def main():
                 print(f"Processing {image_file}...")
                 results = coral_detector.run_inference(image_path)
                 coral_detector.save_results(results, image_file, OUTPUT_DIR)
-                print(f"  Found {results['count']} objects")
                 print(f"  Inference time: {results['inference_time']*1000:.2f}ms")
                 successful_images += 1
             except Exception as e:
