@@ -1,26 +1,18 @@
+import os
+import time
 import numpy as np
 from PIL import Image
 import tflite_runtime.interpreter as tflite
-import cv2
-import time
-from ultralytics import YOLO
+from datetime import datetime
 
 
-class CoralYOLODetector:
-    def __init__(self, model_path, labels_path, conf_threshold=0.3):
-        """
-        Initialize the YOLO detector for Coral TPU.
-
-        Args:
-            model_path: Path to the converted TFLite model
-            labels_path: Path to the labels file
-            conf_threshold: Confidence threshold for detections
-        """
+class CoralInference:
+    def __init__(self, model_path, label_path):
         # Load labels
-        with open(labels_path, "r") as f:
-            self.labels = [line.strip() for line in f.readlines()]
+        with open(label_path, "r") as f:
+            self.labels = {i: line.strip() for i, line in enumerate(f.readlines())}
 
-        # Initialize the TF Lite interpreter
+        # Initialize TFLite interpreter with Edge TPU
         self.interpreter = tflite.Interpreter(
             model_path=model_path,
             experimental_delegates=[tflite.load_delegate("libedgetpu.so.1")],
@@ -30,42 +22,30 @@ class CoralYOLODetector:
         # Get model details
         self.input_details = self.interpreter.get_input_details()
         self.output_details = self.interpreter.get_output_details()
+
         self.input_shape = self.input_details[0]["shape"]
-        self.conf_threshold = conf_threshold
+        self.height = self.input_shape[1]
+        self.width = self.input_shape[2]
 
     def preprocess_image(self, image_path):
-        """
-        Preprocess the image to match model input requirements.
-
-        Args:
-            image_path: Path to input image
-
-        Returns:
-            Preprocessed image array
-        """
-        # Load and resize image
+        """Preprocess image for model input"""
         image = Image.open(image_path)
-        image = image.resize((self.input_shape[1], self.input_shape[2]))
-
-        # Convert to array and normalize
-        image_array = np.array(image)
-        image_array = image_array.astype(np.float32)
-        image_array = image_array / 255.0
-
+        # Convert to RGB if needed
+        if image.mode != "RGB":
+            image = image.convert("RGB")
+        # Resize image to model input size
+        image = image.resize((self.width, self.height))
+        # Convert to numpy array
+        image = np.array(image)
         # Add batch dimension
-        image_array = np.expand_dims(image_array, axis=0)
-        return image_array
+        image = np.expand_dims(image, axis=0)
+        return image.astype(np.uint8)  # Note: using uint8 for quantized model
 
-    def detect(self, image_path):
-        """
-        Perform object detection on the input image.
+    def run_inference(self, image_path):
+        """Run inference on a single image"""
+        # Time the inference
+        start_time = time.perf_counter()
 
-        Args:
-            image_path: Path to input image
-
-        Returns:
-            List of detections, each containing class_id, class_name, confidence, and bounding box
-        """
         # Preprocess image
         input_data = self.preprocess_image(image_path)
 
@@ -73,92 +53,88 @@ class CoralYOLODetector:
         self.interpreter.set_tensor(self.input_details[0]["index"], input_data)
 
         # Run inference
-        start_time = time.time()
         self.interpreter.invoke()
-        inference_time = time.time() - start_time
 
         # Get output tensors
-        # Assuming output format: [batch, num_detections, 6] where 6 is [x, y, w, h, confidence, class]
-        detections = self.interpreter.get_tensor(self.output_details[0]["index"])
+        # Note: Output tensor indices are different for the pre-compiled model
+        boxes = self.interpreter.get_tensor(self.output_details[0]["index"])[0]
+        classes = self.interpreter.get_tensor(self.output_details[1]["index"])[0]
+        scores = self.interpreter.get_tensor(self.output_details[2]["index"])[0]
+        count = int(self.interpreter.get_tensor(self.output_details[3]["index"])[0])
 
-        # Process detections
-        results = []
-        for detection in detections[0]:  # Process first batch only
-            confidence = detection[4]
+        inference_time = time.perf_counter() - start_time
 
-            if confidence > self.conf_threshold:
-                class_id = int(detection[5])
-                class_name = self.labels[class_id]
-                bbox = detection[:4]  # [x, y, width, height]
+        return {
+            "boxes": boxes,
+            "classes": classes,
+            "scores": scores,
+            "count": count,
+            "inference_time": inference_time,
+        }
 
-                results.append(
-                    {
-                        "class_id": class_id,
-                        "class_name": class_name,
-                        "confidence": float(confidence),
-                        "bbox": bbox.tolist(),
-                    }
-                )
-
-        return results, inference_time
-
-
-def visualize_detections(image_path, detections):
-    """
-    Visualize the detected objects on the image.
-
-    Args:
-        image_path: Path to original image
-        detections: List of detections from the detect() method
-    """
-    image = cv2.imread(image_path)
-    height, width = image.shape[:2]
-
-    for det in detections:
-        bbox = det["bbox"]
-        x, y, w, h = bbox
-
-        # Convert normalized coordinates to pixel coordinates
-        x1 = int(x * width)
-        y1 = int(y * height)
-        x2 = int((x + w) * width)
-        y2 = int((y + h) * height)
-
-        # Draw bounding box
-        cv2.rectangle(image, (x1, y1), (x2, y2), (0, 255, 0), 2)
-
-        # Add label
-        label = f"{det['class_name']}: {det['confidence']:.2f}"
-        cv2.putText(
-            image, label, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2
+    def save_results(self, results, image_path, output_dir):
+        """Save inference results to a text file"""
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        base_image_name = os.path.basename(image_path)
+        output_path = os.path.join(
+            output_dir, f"inference_results_{base_image_name}_{timestamp}.txt"
         )
 
-    return image
+        with open(output_path, "w") as f:
+            f.write(f"Results for image: {base_image_name}\n")
+            f.write(f"Inference time: {results['inference_time']*1000:.2f}ms\n")
+            f.write(f"Number of detections: {results['count']}\n\n")
+
+            for i in range(results["count"]):
+                if results["scores"][i] > 0.5:  # Filter low confidence detections
+                    class_id = int(results["classes"][i])
+                    f.write(f"Detection {i+1}:\n")
+                    f.write(f"  Class: {self.labels[class_id]} (ID: {class_id})\n")
+                    f.write(f"  Confidence: {results['scores'][i]:.2f}\n")
+                    f.write(f"  Box: [ymin={results['boxes'][i][0]:.2f}, ")
+                    f.write(f"xmin={results['boxes'][i][1]:.2f}, ")
+                    f.write(f"ymax={results['boxes'][i][2]:.2f}, ")
+                    f.write(f"xmax={results['boxes'][i][3]:.2f}]\n\n")
 
 
-# Example usage
 def main():
-    # Initialize detector
-    detector = CoralYOLODetector(
-        model_path="path/to/your/model.tflite",
-        labels_path="path/to/your/labels.txt",
-        conf_threshold=0.3,
+    # Configuration
+    MODEL_PATH = "ssd_mobilenet_v2_coco_quant_postprocess_edgetpu.tflite"
+    LABEL_PATH = "coco_labels.txt"
+    IMAGE_DIR = "test_images"
+    OUTPUT_DIR = "output"
+
+    # Make sure output directory exists
+    os.makedirs(OUTPUT_DIR, exist_ok=True)
+
+    # Initialize inference
+    try:
+        coral_detector = CoralInference(MODEL_PATH, LABEL_PATH)
+    except Exception as e:
+        print(f"Error initializing detector: {str(e)}")
+        return
+
+    # Process all images in directory
+    total_images = 0
+    successful_images = 0
+
+    for image_file in os.listdir(IMAGE_DIR):
+        if image_file.lower().endswith((".jpg", ".jpeg", ".png", ".bmp")):
+            total_images += 1
+            image_path = os.path.join(IMAGE_DIR, image_file)
+            try:
+                print(f"Processing {image_file}...")
+                results = coral_detector.run_inference(image_path)
+                coral_detector.save_results(results, image_file, OUTPUT_DIR)
+                print(f"  Found {results['count']} objects")
+                print(f"  Inference time: {results['inference_time']*1000:.2f}ms")
+                successful_images += 1
+            except Exception as e:
+                print(f"Error processing {image_file}: {str(e)}")
+
+    print(
+        f"\nProcessing complete! Successfully processed {successful_images}/{total_images} images"
     )
-
-    # Perform detection
-    image_path = "path/to/your/image.jpg"
-    detections, inference_time = detector.detect(image_path)
-
-    # Print results
-    print(f"Inference time: {inference_time:.2f} seconds")
-    for det in detections:
-        print(f"Detected {det['class_name']} with confidence {det['confidence']:.2f}")
-
-    # Visualize results
-    result_image = visualize_detections(image_path, detections)
-    cv2.imshow("Detections", result_image)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
 
 
 if __name__ == "__main__":
