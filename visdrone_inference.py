@@ -255,7 +255,7 @@ class VisDroneInference:
 def main():
     # Configuration
     MODEL_PATH = "visdrone_model_edge_tpu.tflite"
-    IMAGE_DIR = "test_images/VisDrone-test-challenge-sample-dataset"
+    IMAGE_DIR = "test_images/VisDrone-test-challenge-smol-dataset"
     OUTPUT_DIR = "inference_results"
     OUTPUT_FILE = "inference_results.json"
     results_path = os.path.join(OUTPUT_DIR, OUTPUT_FILE)
