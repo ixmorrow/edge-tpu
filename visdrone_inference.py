@@ -91,7 +91,7 @@ class VisDroneInference:
 
                     # Filter confident detections
                     confident_detections = []
-                    for box, cls_probs in zip(results["boxes"], results["classes"]):
+                    for box, cls_probs in zip(results["boxes"], results["labels"]):
                         confidence = np.max(cls_probs)
                         if confidence > 0.5:
                             class_id = np.argmax(cls_probs)
