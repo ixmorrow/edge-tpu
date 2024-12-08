@@ -71,31 +71,157 @@ class VisDroneInference:
                 print(f"  Unable to read image details: {str(inner_e)}")
             raise
 
+    # def run_inference(self, image_path):
+    #     """Run inference with detailed error reporting"""
+    #     try:
+    #         # Preprocess image
+    #         input_data = self.preprocess_image(image_path)
+
+    #         # Time the inference
+    #         start_time = time.perf_counter()
+
+    #         # Set input tensor
+    #         self.interpreter.set_tensor(self.input_details[0]["index"], input_data)
+
+    #         # Run inference
+    #         self.interpreter.invoke()
+
+    #         # Get inference time
+    #         inference_time = time.perf_counter() - start_time
+
+    #         # Get outputs
+    #         boxes = self.interpreter.get_tensor(self.output_details[0]["index"])[0]
+    #         classes = self.interpreter.get_tensor(self.output_details[1]["index"])[0]
+
+    #         return {
+    #             "boxes": boxes,
+    #             "classes": classes,
+    #             "inference_time": inference_time,
+    #         }
+
+    #     except Exception as e:
+    #         print(f"Detailed error for {image_path}:")
+    #         print(f"  Error type: {type(e).__name__}")
+    #         print(f"  Error message: {str(e)}")
+    #         if hasattr(e, "errno"):
+    #             print(f"  Error number: {e.errno}")
+    #         raise
+    def non_max_suppression(
+        self, boxes, scores, classes, max_output_size=20, iou_threshold=0.5
+    ):
+        """Apply non-maximum suppression"""
+        selected_indices = []
+        valid_boxes = []
+
+        # Convert scores to list for sorting
+        score_list = scores.tolist()
+        indices = sorted(
+            range(len(score_list)), key=lambda i: score_list[i], reverse=True
+        )
+
+        while len(indices) > 0 and len(selected_indices) < max_output_size:
+            idx = indices[0]
+            selected_indices.append(idx)
+            valid_boxes.append(boxes[idx])
+
+            # Remove indices of boxes with high IoU
+            indices = [
+                i
+                for i in indices[1:]
+                if self.calculate_iou(boxes[idx], boxes[i]) < iou_threshold
+            ]
+
+        return (
+            np.array(valid_boxes),
+            np.array([scores[i] for i in selected_indices]),
+            np.array([classes[i] for i in selected_indices]),
+        )
+
+    def calculate_iou(self, box1, box2):
+        """Calculate Intersection over Union (IoU) between two boxes"""
+        y1_1, x1_1, y2_1, x2_1 = box1
+        y1_2, x1_2, y2_2, x2_2 = box2
+
+        # Calculate intersection coordinates
+        x_left = max(x1_1, x1_2)
+        y_top = max(y1_1, y1_2)
+        x_right = min(x2_1, x2_2)
+        y_bottom = min(y2_1, y2_2)
+
+        if x_right < x_left or y_bottom < y_top:
+            return 0.0
+
+        intersection_area = (x_right - x_left) * (y_bottom - y_top)
+
+        # Calculate union area
+        box1_area = (x2_1 - x1_1) * (y2_1 - y1_1)
+        box2_area = (x2_2 - x1_2) * (y2_2 - y1_2)
+        union_area = box1_area + box2_area - intersection_area
+
+        return intersection_area / union_area if union_area > 0 else 0
+
+    def decode_boxes(self, raw_boxes, anchors):
+        """Decode raw box predictions using anchor boxes"""
+        # This is a simplified version - adjust based on your model's exact encoding
+        y_scale = self.height
+        x_scale = self.width
+
+        decoded_boxes = []
+        for raw_box, anchor in zip(raw_boxes, anchors):
+            cy = raw_box[0] * anchor[2] * y_scale + anchor[0]
+            cx = raw_box[1] * anchor[3] * x_scale + anchor[1]
+            h = np.exp(raw_box[2]) * anchor[2]
+            w = np.exp(raw_box[3]) * anchor[3]
+
+            ymin = cy - h / 2
+            xmin = cx - w / 2
+            ymax = cy + h / 2
+            xmax = cx + w / 2
+
+            decoded_boxes.append([ymin, xmin, ymax, xmax])
+
+        return np.array(decoded_boxes)
+
     def run_inference(self, image_path):
-        """Run inference with detailed error reporting"""
+        """Run inference with proper decoding and NMS"""
         try:
             # Preprocess image
             input_data = self.preprocess_image(image_path)
-
-            # Time the inference
             start_time = time.perf_counter()
 
-            # Set input tensor
+            # Set input tensor and run inference
             self.interpreter.set_tensor(self.input_details[0]["index"], input_data)
-
-            # Run inference
             self.interpreter.invoke()
 
-            # Get inference time
+            # Get raw outputs
+            raw_boxes = self.interpreter.get_tensor(self.output_details[0]["index"])[0]
+            raw_classes = self.interpreter.get_tensor(self.output_details[1]["index"])[
+                0
+            ]
+
+            # Get anchors (you'll need to define these based on your model)
+            anchors = (
+                self.generate_anchors()
+            )  # Implement this based on your model's config
+
+            # Decode boxes
+            decoded_boxes = self.decode_boxes(raw_boxes, anchors)
+
+            # Get class scores
+            class_scores = np.max(raw_classes, axis=-1)
+            class_indices = np.argmax(raw_classes, axis=-1)
+
+            # Apply NMS
+            filtered_boxes, filtered_scores, filtered_classes = (
+                self.non_max_suppression(decoded_boxes, class_scores, class_indices)
+            )
+
             inference_time = time.perf_counter() - start_time
 
-            # Get outputs
-            boxes = self.interpreter.get_tensor(self.output_details[0]["index"])[0]
-            classes = self.interpreter.get_tensor(self.output_details[1]["index"])[0]
-
             return {
-                "boxes": boxes,
-                "classes": classes,
+                "boxes": filtered_boxes,
+                "classes": filtered_classes,
+                "scores": filtered_scores,
                 "inference_time": inference_time,
             }
 
@@ -103,8 +229,6 @@ class VisDroneInference:
             print(f"Detailed error for {image_path}:")
             print(f"  Error type: {type(e).__name__}")
             print(f"  Error message: {str(e)}")
-            if hasattr(e, "errno"):
-                print(f"  Error number: {e.errno}")
             raise
 
     def process_directory(self, image_dir, results_path):
