@@ -2,14 +2,14 @@
   "total_images": 100,
   "processed_images": 100,
   "failed_images": 0,
-  "average_inference_time_ms": 5.407760529983534,
+  "average_inference_time_ms": 5.443768969980738,
   "total_detections": 10000,
   "detections_per_image": 100.0,
   "failed_images_list": [],
   "detailed_results": [
     {
       "image": "9999978_00000_d_0000004.jpg",
-      "inference_time_ms": 18.19557299995722,
+      "inference_time_ms": 18.223662999844237,
       "detections": [
         {
           "class": "pedestrian",
@@ -1015,7 +1015,7 @@
     },
     {
       "image": "9999954_00000_d_0000025.jpg",
-      "inference_time_ms": 5.591187999925751,
+      "inference_time_ms": 5.133595000188507,
       "detections": [
         {
           "class": "pedestrian",
@@ -2021,7 +2021,7 @@
     },
     {
       "image": "0000097_06366_d_0000041.jpg",
-      "inference_time_ms": 5.219546999796876,
+      "inference_time_ms": 5.528994999622228,
       "detections": [
         {
           "class": "pedestrian",
@@ -3027,7 +3027,7 @@
     },
     {
       "image": "9999939_00000_d_0000172.jpg",
-      "inference_time_ms": 5.034985999827768,
+      "inference_time_ms": 5.454834999909508,
       "detections": [
         {
           "class": "pedestrian",
@@ -4033,7 +4033,7 @@
     },
     {
       "image": "9999954_00000_d_0000111.jpg",
-      "inference_time_ms": 5.020824999974138,
+      "inference_time_ms": 5.531034999876283,
       "detections": [
         {
           "class": "pedestrian",
@@ -5039,7 +5039,7 @@
     },
     {
       "image": "0000233_02450_d_0000009.jpg",
-      "inference_time_ms": 5.512229000032676,
+      "inference_time_ms": 5.025476000810158,
       "detections": [
         {
           "class": "pedestrian",
@@ -6045,7 +6045,7 @@
     },
     {
       "image": "9999988_00000_d_0000028.jpg",
-      "inference_time_ms": 5.510187999789196,
+      "inference_time_ms": 5.470074999720964,
       "detections": [
         {
           "class": "pedestrian",
@@ -7051,7 +7051,7 @@
     },
     {
       "image": "9999949_00000_d_0000040.jpg",
-      "inference_time_ms": 5.521708999822295,
+      "inference_time_ms": 5.541835000258288,
       "detections": [
         {
           "class": "pedestrian",
@@ -8057,7 +8057,7 @@
     },
     {
       "image": "9999936_00000_d_0000043.jpg",
-      "inference_time_ms": 4.589423999732389,
+      "inference_time_ms": 5.115955999826838,
       "detections": [
         {
           "class": "pedestrian",
@@ -9063,7 +9063,7 @@
     },
     {
       "image": "9999978_00000_d_0000010.jpg",
-      "inference_time_ms": 5.5520679998153355,
+      "inference_time_ms": 5.562954999732028,
       "detections": [
         {
           "class": "pedestrian",
@@ -10069,7 +10069,7 @@
     },
     {
       "image": "9999936_00000_d_0000045.jpg",
-      "inference_time_ms": 5.567428000176733,
+      "inference_time_ms": 5.594034999376163,
       "detections": [
         {
           "class": "pedestrian",
@@ -11075,7 +11075,7 @@
     },
     {
       "image": "9999936_00000_d_0000015.jpg",
-      "inference_time_ms": 4.993225999896822,
+      "inference_time_ms": 5.5411149996871245,
       "detections": [
         {
           "class": "pedestrian",
@@ -12081,7 +12081,7 @@
     },
     {
       "image": "0000350_06000_d_0000184.jpg",
-      "inference_time_ms": 5.559389000154624,
+      "inference_time_ms": 4.653476000385126,
       "detections": [
         {
           "class": "pedestrian",
@@ -13087,7 +13087,7 @@
     },
     {
       "image": "9999983_00000_d_0000059.jpg",
-      "inference_time_ms": 5.0214259999847854,
+      "inference_time_ms": 4.956235999998171,
       "detections": [
         {
           "class": "pedestrian",
@@ -14093,7 +14093,7 @@
     },
     {
       "image": "9999949_00000_d_0000034.jpg",
-      "inference_time_ms": 5.006665999644611,
+      "inference_time_ms": 5.574475000685197,
       "detections": [
         {
           "class": "pedestrian",
@@ -15099,7 +15099,7 @@
     },
     {
       "image": "9999939_00000_d_0000085.jpg",
-      "inference_time_ms": 5.695109000043885,
+      "inference_time_ms": 5.03135500002827,
       "detections": [
         {
           "class": "pedestrian",
@@ -16105,7 +16105,7 @@
     },
     {
       "image": "9999939_00000_d_0000291.jpg",
-      "inference_time_ms": 5.552908000026946,
+      "inference_time_ms": 5.52395499926206,
       "detections": [
         {
           "class": "pedestrian",
@@ -17111,7 +17111,7 @@
     },
     {
       "image": "9999936_00000_d_0000066.jpg",
-      "inference_time_ms": 5.559388999699877,
+      "inference_time_ms": 5.486755000674748,
       "detections": [
         {
           "class": "pedestrian",
@@ -18117,7 +18117,7 @@
     },
     {
       "image": "9999983_00000_d_0000005.jpg",
-      "inference_time_ms": 5.045066000093357,
+      "inference_time_ms": 5.4544750000786735,
       "detections": [
         {
           "class": "pedestrian",
@@ -19123,7 +19123,7 @@
     },
     {
       "image": "9999939_00000_d_0000297.jpg",
-      "inference_time_ms": 5.5075489999580896,
+      "inference_time_ms": 5.014074999962759,
       "detections": [
         {
           "class": "pedestrian",
@@ -20129,7 +20129,7 @@
     },
     {
       "image": "0000362_02500_d_0000217.jpg",
-      "inference_time_ms": 5.606068999895797,
+      "inference_time_ms": 5.622595000204456,
       "detections": [
         {
           "class": "pedestrian",
@@ -21135,7 +21135,7 @@
     },
     {
       "image": "9999939_00000_d_0000251.jpg",
-      "inference_time_ms": 5.019626000375865,
+      "inference_time_ms": 4.631515999790281,
       "detections": [
         {
           "class": "pedestrian",
@@ -22141,7 +22141,7 @@
     },
     {
       "image": "9999954_00000_d_0000163.jpg",
-      "inference_time_ms": 5.027665999932651,
+      "inference_time_ms": 5.237276000116253,
       "detections": [
         {
           "class": "pedestrian",
@@ -23147,7 +23147,7 @@
     },
     {
       "image": "0000233_02350_d_0000008.jpg",
-      "inference_time_ms": 5.034986000282515,
+      "inference_time_ms": 5.01719600015349,
       "detections": [
         {
           "class": "pedestrian",
@@ -24153,7 +24153,7 @@
     },
     {
       "image": "9999939_00000_d_0000433.jpg",
-      "inference_time_ms": 5.032825999933266,
+      "inference_time_ms": 5.52479499947367,
       "detections": [
         {
           "class": "pedestrian",
@@ -25159,7 +25159,7 @@
     },
     {
       "image": "0000350_07500_d_0000187.jpg",
-      "inference_time_ms": 5.144426999777352,
+      "inference_time_ms": 5.776195000180451,
       "detections": [
         {
           "class": "pedestrian",
@@ -26165,7 +26165,7 @@
     },
     {
       "image": "9999939_00000_d_0000442.jpg",
-      "inference_time_ms": 5.539709000004223,
+      "inference_time_ms": 5.427955999948608,
       "detections": [
         {
           "class": "pedestrian",
@@ -27171,7 +27171,7 @@
     },
     {
       "image": "9999939_00000_d_0000247.jpg",
-      "inference_time_ms": 5.526987999928679,
+      "inference_time_ms": 5.437075000372715,
       "detections": [
         {
           "class": "pedestrian",
@@ -28177,7 +28177,7 @@
     },
     {
       "image": "0000367_03500_d_0000234.jpg",
-      "inference_time_ms": 5.625989000236586,
+      "inference_time_ms": 5.048274999353453,
       "detections": [
         {
           "class": "pedestrian",
@@ -29183,7 +29183,7 @@
     },
     {
       "image": "9999939_00000_d_0000108.jpg",
-      "inference_time_ms": 5.526867999833485,
+      "inference_time_ms": 5.132995999701961,
       "detections": [
         {
           "class": "pedestrian",
@@ -30189,7 +30189,7 @@
     },
     {
       "image": "9999939_00000_d_0000010.jpg",
-      "inference_time_ms": 5.5635889998484345,
+      "inference_time_ms": 5.685115000233054,
       "detections": [
         {
           "class": "pedestrian",
@@ -31195,7 +31195,7 @@
     },
     {
       "image": "9999939_00000_d_0000269.jpg",
-      "inference_time_ms": 5.5088690000957286,
+      "inference_time_ms": 5.544354999983625,
       "detections": [
         {
           "class": "pedestrian",
@@ -32201,7 +32201,7 @@
     },
     {
       "image": "9999983_00000_d_0000158.jpg",
-      "inference_time_ms": 5.543188000046939,
+      "inference_time_ms": 5.659555000420369,
       "detections": [
         {
           "class": "pedestrian",
@@ -33207,7 +33207,7 @@
     },
     {
       "image": "0000367_05511_d_0000235.jpg",
-      "inference_time_ms": 5.632349000279646,
+      "inference_time_ms": 5.267394999464159,
       "detections": [
         {
           "class": "pedestrian",
@@ -34213,7 +34213,7 @@
     },
     {
       "image": "9999939_00000_d_0000214.jpg",
-      "inference_time_ms": 5.020224999952916,
+      "inference_time_ms": 5.534874999284511,
       "detections": [
         {
           "class": "pedestrian",
@@ -35219,7 +35219,7 @@
     },
     {
       "image": "9999939_00000_d_0000361.jpg",
-      "inference_time_ms": 5.460267999751522,
+      "inference_time_ms": 5.513395999514614,
       "detections": [
         {
           "class": "pedestrian",
@@ -36225,7 +36225,7 @@
     },
     {
       "image": "9999936_00000_d_0000055.jpg",
-      "inference_time_ms": 5.543548999867198,
+      "inference_time_ms": 5.5735149999236455,
       "detections": [
         {
           "class": "pedestrian",
@@ -37231,7 +37231,7 @@
     },
     {
       "image": "9999939_00000_d_0000262.jpg",
-      "inference_time_ms": 5.531428999802301,
+      "inference_time_ms": 5.098796000311268,
       "detections": [
         {
           "class": "pedestrian",
@@ -38237,7 +38237,7 @@
     },
     {
       "image": "9999949_00000_d_0000071.jpg",
-      "inference_time_ms": 5.506227999831026,
+      "inference_time_ms": 5.517115000657213,
       "detections": [
         {
           "class": "pedestrian",
@@ -39243,7 +39243,7 @@
     },
     {
       "image": "0000119_05276_d_0000090.jpg",
-      "inference_time_ms": 5.625988999781839,
+      "inference_time_ms": 5.636275000142632,
       "detections": [
         {
           "class": "pedestrian",
@@ -40249,7 +40249,7 @@
     },
     {
       "image": "9999954_00000_d_0000106.jpg",
-      "inference_time_ms": 5.035705999944184,
+      "inference_time_ms": 5.007836000004318,
       "detections": [
         {
           "class": "pedestrian",
@@ -41255,7 +41255,7 @@
     },
     {
       "image": "9999939_00000_d_0000132.jpg",
-      "inference_time_ms": 5.455347999941296,
+      "inference_time_ms": 5.539195999517688,
       "detections": [
         {
           "class": "pedestrian",
@@ -42261,7 +42261,7 @@
     },
     {
       "image": "9999946_00000_d_0000021.jpg",
-      "inference_time_ms": 5.533827999897767,
+      "inference_time_ms": 5.174994999833871,
       "detections": [
         {
           "class": "pedestrian",
@@ -43267,7 +43267,7 @@
     },
     {
       "image": "0000232_00000_d_0000001.jpg",
-      "inference_time_ms": 5.044105999786552,
+      "inference_time_ms": 5.047556000135955,
       "detections": [
         {
           "class": "pedestrian",
@@ -44273,7 +44273,7 @@
     },
     {
       "image": "9999939_00000_d_0000072.jpg",
-      "inference_time_ms": 5.567788999996992,
+      "inference_time_ms": 5.464796000524075,
       "detections": [
         {
           "class": "pedestrian",
@@ -45279,7 +45279,7 @@
     },
     {
       "image": "9999939_00000_d_0000150.jpg",
-      "inference_time_ms": 5.459548000089853,
+      "inference_time_ms": 4.5921560003989725,
       "detections": [
         {
           "class": "pedestrian",
@@ -46285,7 +46285,7 @@
     },
     {
       "image": "9999988_00000_d_0000023.jpg",
-      "inference_time_ms": 5.589267999766889,
+      "inference_time_ms": 4.745515999275085,
       "detections": [
         {
           "class": "pedestrian",
@@ -47291,7 +47291,7 @@
     },
     {
       "image": "9999936_00000_d_0000025.jpg",
-      "inference_time_ms": 5.553747999783809,
+      "inference_time_ms": 5.242076000286033,
       "detections": [
         {
           "class": "pedestrian",
@@ -48297,7 +48297,7 @@
     },
     {
       "image": "9999939_00000_d_0000169.jpg",
-      "inference_time_ms": 5.534788000204571,
+      "inference_time_ms": 4.572236000058183,
       "detections": [
         {
           "class": "pedestrian",
@@ -49303,7 +49303,7 @@
     },
     {
       "image": "9999954_00000_d_0000038.jpg",
-      "inference_time_ms": 5.060305999904813,
+      "inference_time_ms": 5.03915599983884,
       "detections": [
         {
           "class": "pedestrian",
@@ -50309,7 +50309,7 @@
     },
     {
       "image": "9999968_00000_d_0000025.jpg",
-      "inference_time_ms": 5.399667999881785,
+      "inference_time_ms": 5.537996000384737,
       "detections": [
         {
           "class": "pedestrian",
@@ -51315,7 +51315,7 @@
     },
     {
       "image": "9999988_00000_d_0000037.jpg",
-      "inference_time_ms": 5.53610800034221,
+      "inference_time_ms": 5.486036000547756,
       "detections": [
         {
           "class": "pedestrian",
@@ -52321,7 +52321,7 @@
     },
     {
       "image": "9999983_00000_d_0000054.jpg",
-      "inference_time_ms": 5.0951059997714765,
+      "inference_time_ms": 5.500674999893818,
       "detections": [
         {
           "class": "pedestrian",
@@ -53327,7 +53327,7 @@
     },
     {
       "image": "9999978_00000_d_0000002.jpg",
-      "inference_time_ms": 5.526868000288232,
+      "inference_time_ms": 5.162636000022758,
       "detections": [
         {
           "class": "pedestrian",
@@ -54333,7 +54333,7 @@
     },
     {
       "image": "9999968_00000_d_0000060.jpg",
-      "inference_time_ms": 5.076385999927879,
+      "inference_time_ms": 5.212555000071006,
       "detections": [
         {
           "class": "pedestrian",
@@ -55339,7 +55339,7 @@
     },
     {
       "image": "0000053_00539_d_0000002.jpg",
-      "inference_time_ms": 4.952786000103515,
+      "inference_time_ms": 5.537994999940565,
       "detections": [
         {
           "class": "pedestrian",
@@ -56345,7 +56345,7 @@
     },
     {
       "image": "9999992_00000_d_0000012.jpg",
-      "inference_time_ms": 5.089825999675668,
+      "inference_time_ms": 5.803314999866416,
       "detections": [
         {
           "class": "pedestrian",
@@ -57351,7 +57351,7 @@
     },
     {
       "image": "9999939_00000_d_0000195.jpg",
-      "inference_time_ms": 5.0681060001807055,
+      "inference_time_ms": 5.0059160003002035,
       "detections": [
         {
           "class": "pedestrian",
@@ -58357,7 +58357,7 @@
     },
     {
       "image": "9999939_00000_d_0000345.jpg",
-      "inference_time_ms": 5.067626000254677,
+      "inference_time_ms": 5.47655499940447,
       "detections": [
         {
           "class": "pedestrian",
@@ -59363,7 +59363,7 @@
     },
     {
       "image": "9999939_00000_d_0000001.jpg",
-      "inference_time_ms": 5.574507999881462,
+      "inference_time_ms": 5.034714999965217,
       "detections": [
         {
           "class": "pedestrian",
@@ -60369,7 +60369,7 @@
     },
     {
       "image": "9999939_00000_d_0000328.jpg",
-      "inference_time_ms": 5.1259470001241425,
+      "inference_time_ms": 5.749434999415826,
       "detections": [
         {
           "class": "pedestrian",
@@ -61375,7 +61375,7 @@
     },
     {
       "image": "9999983_00000_d_0000103.jpg",
-      "inference_time_ms": 5.2311859999463195,
+      "inference_time_ms": 5.096995999338105,
       "detections": [
         {
           "class": "pedestrian",
@@ -62381,7 +62381,7 @@
     },
     {
       "image": "9999939_00000_d_0000044.jpg",
-      "inference_time_ms": 5.061385999852064,
+      "inference_time_ms": 5.395555999712087,
       "detections": [
         {
           "class": "pedestrian",
@@ -63387,7 +63387,7 @@
     },
     {
       "image": "9999939_00000_d_0000314.jpg",
-      "inference_time_ms": 4.920865999793023,
+      "inference_time_ms": 5.542195000089123,
       "detections": [
         {
           "class": "pedestrian",
@@ -64393,7 +64393,7 @@
     },
     {
       "image": "9999939_00000_d_0000184.jpg",
-      "inference_time_ms": 5.056706000232225,
+      "inference_time_ms": 5.0225960003444925,
       "detections": [
         {
           "class": "pedestrian",
@@ -65399,7 +65399,7 @@
     },
     {
       "image": "9999946_00000_d_0000014.jpg",
-      "inference_time_ms": 5.079506000129186,
+      "inference_time_ms": 4.984436000086134,
       "detections": [
         {
           "class": "pedestrian",
@@ -66405,7 +66405,7 @@
     },
     {
       "image": "9999939_00000_d_0000205.jpg",
-      "inference_time_ms": 5.072905999895738,
+      "inference_time_ms": 5.005314999834809,
       "detections": [
         {
           "class": "pedestrian",
@@ -67411,7 +67411,7 @@
     },
     {
       "image": "9999988_00000_d_0000009.jpg",
-      "inference_time_ms": 5.100746000152867,
+      "inference_time_ms": 5.548674999772629,
       "detections": [
         {
           "class": "pedestrian",
@@ -68417,7 +68417,7 @@
     },
     {
       "image": "9999992_00000_d_0000003.jpg",
-      "inference_time_ms": 5.514987999958976,
+      "inference_time_ms": 5.5321150002782815,
       "detections": [
         {
           "class": "pedestrian",
@@ -69423,7 +69423,7 @@
     },
     {
       "image": "9999936_00000_d_0000049.jpg",
-      "inference_time_ms": 5.095466000057058,
+      "inference_time_ms": 5.051756000284513,
       "detections": [
         {
           "class": "pedestrian",
@@ -70429,7 +70429,7 @@
     },
     {
       "image": "9999939_00000_d_0000125.jpg",
-      "inference_time_ms": 5.058866000126727,
+      "inference_time_ms": 5.4968360000202665,
       "detections": [
         {
           "class": "pedestrian",
@@ -71435,7 +71435,7 @@
     },
     {
       "image": "9999949_00000_d_0000022.jpg",
-      "inference_time_ms": 4.904424999949697,
+      "inference_time_ms": 5.567395000070974,
       "detections": [
         {
           "class": "pedestrian",
@@ -72441,7 +72441,7 @@
     },
     {
       "image": "9999954_00000_d_0000133.jpg",
-      "inference_time_ms": 4.558703999919089,
+      "inference_time_ms": 5.462156000248797,
       "detections": [
         {
           "class": "pedestrian",
@@ -73447,7 +73447,7 @@
     },
     {
       "image": "9999946_00000_d_0000012.jpg",
-      "inference_time_ms": 4.901425000298332,
+      "inference_time_ms": 5.585275999692385,
       "detections": [
         {
           "class": "pedestrian",
@@ -74453,7 +74453,7 @@
     },
     {
       "image": "9999983_00000_d_0000078.jpg",
-      "inference_time_ms": 5.413227999724768,
+      "inference_time_ms": 5.544235999877856,
       "detections": [
         {
           "class": "pedestrian",
@@ -75459,7 +75459,7 @@
     },
     {
       "image": "9999946_00000_d_0000024.jpg",
-      "inference_time_ms": 5.05466599997817,
+      "inference_time_ms": 5.575915000008536,
       "detections": [
         {
           "class": "pedestrian",
@@ -76465,7 +76465,7 @@
     },
     {
       "image": "9999954_00000_d_0000148.jpg",
-      "inference_time_ms": 5.5405480002264085,
+      "inference_time_ms": 5.5463950002376805,
       "detections": [
         {
           "class": "pedestrian",
@@ -77471,7 +77471,7 @@
     },
     {
       "image": "9999983_00000_d_0000150.jpg",
-      "inference_time_ms": 5.513187999895308,
+      "inference_time_ms": 4.986955999811471,
       "detections": [
         {
           "class": "pedestrian",
@@ -78477,7 +78477,7 @@
     },
     {
       "image": "9999983_00000_d_0000034.jpg",
-      "inference_time_ms": 5.521588000192423,
+      "inference_time_ms": 5.573395999817876,
       "detections": [
         {
           "class": "pedestrian",
@@ -79483,7 +79483,7 @@
     },
     {
       "image": "9999939_00000_d_0000358.jpg",
-      "inference_time_ms": 5.472628000006807,
+      "inference_time_ms": 5.54315499994118,
       "detections": [
         {
           "class": "pedestrian",
@@ -80489,7 +80489,7 @@
     },
     {
       "image": "9999939_00000_d_0000173.jpg",
-      "inference_time_ms": 5.526747999738291,
+      "inference_time_ms": 5.55551499928697,
       "detections": [
         {
           "class": "pedestrian",
@@ -81495,7 +81495,7 @@
     },
     {
       "image": "9999939_00000_d_0000133.jpg",
-      "inference_time_ms": 5.019266000090283,
+      "inference_time_ms": 5.2258759997130255,
       "detections": [
         {
           "class": "pedestrian",
@@ -82501,7 +82501,7 @@
     },
     {
       "image": "9999983_00000_d_0000028.jpg",
-      "inference_time_ms": 5.534788000204571,
+      "inference_time_ms": 5.551075000767014,
       "detections": [
         {
           "class": "pedestrian",
@@ -83507,7 +83507,7 @@
     },
     {
       "image": "9999939_00000_d_0000156.jpg",
-      "inference_time_ms": 5.04014600028313,
+      "inference_time_ms": 5.524915000023611,
       "detections": [
         {
           "class": "pedestrian",
@@ -84513,7 +84513,7 @@
     },
     {
       "image": "9999958_00000_d_0000018.jpg",
-      "inference_time_ms": 4.937424999752693,
+      "inference_time_ms": 5.044796000220231,
       "detections": [
         {
           "class": "pedestrian",
@@ -85519,7 +85519,7 @@
     },
     {
       "image": "9999936_00000_d_0000010.jpg",
-      "inference_time_ms": 4.995264999706706,
+      "inference_time_ms": 5.548795999857248,
       "detections": [
         {
           "class": "pedestrian",
@@ -86525,7 +86525,7 @@
     },
     {
       "image": "0000088_00131_d_0000001.jpg",
-      "inference_time_ms": 5.04650600032619,
+      "inference_time_ms": 5.5297150001933915,
       "detections": [
         {
           "class": "pedestrian",
@@ -87531,7 +87531,7 @@
     },
     {
       "image": "9999946_00000_d_0000018.jpg",
-      "inference_time_ms": 5.052985000020271,
+      "inference_time_ms": 5.537394999919343,
       "detections": [
         {
           "class": "pedestrian",
@@ -88537,7 +88537,7 @@
     },
     {
       "image": "9999954_00000_d_0000028.jpg",
-      "inference_time_ms": 5.034986000282515,
+      "inference_time_ms": 5.059436000010464,
       "detections": [
         {
           "class": "pedestrian",
@@ -89543,7 +89543,7 @@
     },
     {
       "image": "9999954_00000_d_0000013.jpg",
-      "inference_time_ms": 5.549188000259164,
+      "inference_time_ms": 4.898875999970187,
       "detections": [
         {
           "class": "pedestrian",
@@ -90549,7 +90549,7 @@
     },
     {
       "image": "9999954_00000_d_0000145.jpg",
-      "inference_time_ms": 5.5428280002161046,
+      "inference_time_ms": 5.38259599943558,
       "detections": [
         {
           "class": "pedestrian",
@@ -91555,7 +91555,7 @@
     },
     {
       "image": "9999961_00000_d_0000006.jpg",
-      "inference_time_ms": 5.020585999773175,
+      "inference_time_ms": 5.395315999521699,
       "detections": [
         {
           "class": "pedestrian",
@@ -92561,7 +92561,7 @@
     },
     {
       "image": "9999983_00000_d_0000037.jpg",
-      "inference_time_ms": 5.0547860000733635,
+      "inference_time_ms": 5.106956000417995,
       "detections": [
         {
           "class": "pedestrian",
@@ -93567,7 +93567,7 @@
     },
     {
       "image": "0000191_03064_d_0000210.jpg",
-      "inference_time_ms": 5.031384999711008,
+      "inference_time_ms": 4.888915999799792,
       "detections": [
         {
           "class": "pedestrian",
@@ -94573,7 +94573,7 @@
     },
     {
       "image": "9999983_00000_d_0000147.jpg",
-      "inference_time_ms": 5.467468000006193,
+      "inference_time_ms": 5.416676000095322,
       "detections": [
         {
           "class": "pedestrian",
@@ -95579,7 +95579,7 @@
     },
     {
       "image": "9999961_00000_d_0000020.jpg",
-      "inference_time_ms": 4.990825999811932,
+      "inference_time_ms": 5.492876000062097,
       "detections": [
         {
           "class": "pedestrian",
@@ -96585,7 +96585,7 @@
     },
     {
       "image": "9999983_00000_d_0000080.jpg",
-      "inference_time_ms": 5.060066000169172,
+      "inference_time_ms": 4.644116000235954,
       "detections": [
         {
           "class": "pedestrian",
@@ -97591,7 +97591,7 @@
     },
     {
       "image": "9999939_00000_d_0000338.jpg",
-      "inference_time_ms": 5.038585999955103,
+      "inference_time_ms": 5.111276000206999,
       "detections": [
         {
           "class": "pedestrian",
@@ -98597,7 +98597,7 @@
     },
     {
       "image": "9999978_00000_d_0000007.jpg",
-      "inference_time_ms": 5.545828000322217,
+      "inference_time_ms": 5.083434999505698,
       "detections": [
         {
           "class": "pedestrian",
@@ -99603,7 +99603,7 @@
     },
     {
       "image": "9999936_00000_d_0000032.jpg",
-      "inference_time_ms": 5.589268999756314,
+      "inference_time_ms": 5.078996000520419,
       "detections": [
         {
           "class": "pedestrian",
