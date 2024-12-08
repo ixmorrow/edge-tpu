@@ -196,7 +196,7 @@ def main():
     # Configuration
     MODEL_PATH = "visdrone_model_edge_tpu.tflite"
     IMAGE_DIR = "test_images/VisDrone-test-challenge-sample-dataset"
-    OUTPUT_DIR = "inference_results"
+    OUTPUT_DIR = "inference_results.json"
 
     # Create output directory
     os.makedirs(OUTPUT_DIR, exist_ok=True)
