@@ -196,7 +196,9 @@ def main():
     # Configuration
     MODEL_PATH = "visdrone_model_edge_tpu.tflite"
     IMAGE_DIR = "test_images/VisDrone-test-challenge-sample-dataset"
-    OUTPUT_DIR = "inference_results.json"
+    OUTPUT_DIR = "inference_results"
+    OUTPUT_FILE = "inference_results.json"
+    results_path = os.path.join(OUTPUT_DIR, OUTPUT_FILE)
 
     # Create output directory
     os.makedirs(OUTPUT_DIR, exist_ok=True)
@@ -215,7 +217,7 @@ def main():
     #             print(f"  Inference time: {results['inference_time']*1000:.2f}ms")
     #         except Exception as e:
     #             print(f"Error processing {image_file}: {str(e)}")
-    detector.process_directory(IMAGE_DIR, OUTPUT_DIR)
+    detector.process_directory(IMAGE_DIR, results_path)
 
 
 if __name__ == "__main__":
