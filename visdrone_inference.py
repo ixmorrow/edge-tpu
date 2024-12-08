@@ -5,7 +5,6 @@ import numpy as np
 from PIL import Image
 import tflite_runtime.interpreter as tflite
 from datetime import datetime
-import tensorflow as tf
 
 
 class VisDroneInference:
@@ -77,6 +76,76 @@ class VisDroneInference:
 
         return {"boxes": boxes, "labels": labels, "inference_time": inference_time}
 
+    def process_directory(self, image_dir, results_path):
+        """Process all images in a directory"""
+        all_results = []
+        total_time = 0
+        num_images = 0
+
+        # Process each image in directory
+        for filename in os.listdir(image_dir):
+            if filename.lower().endswith((".png", ".jpg", ".jpeg")):
+                image_path = os.path.join(image_dir, filename)
+                try:
+                    results = self.run_inference(image_path)
+
+                    # Filter confident detections
+                    confident_detections = []
+                    for box, cls_probs in zip(results["boxes"], results["classes"]):
+                        confidence = np.max(cls_probs)
+                        if confidence > 0.5:
+                            class_id = np.argmax(cls_probs)
+                            confident_detections.append(
+                                {
+                                    "class": self.CATEGORY_MAPPING[class_id],
+                                    "confidence": float(confidence),
+                                    "box": box.tolist(),
+                                }
+                            )
+
+                    # Record results
+                    all_results.append(
+                        {
+                            "image": filename,
+                            "inference_time_ms": results["inference_time"] * 1000,
+                            "detections": confident_detections,
+                        }
+                    )
+
+                    total_time += results["inference_time"]
+                    num_images += 1
+
+                    print(
+                        f"Processed {filename}: {len(confident_detections)} detections"
+                    )
+
+                except Exception as e:
+                    print(f"Error processing {filename}: {str(e)}")
+
+        # Calculate summary statistics
+        if num_images > 0:
+            avg_time = (total_time / num_images) * 1000  # Convert to ms
+            total_detections = sum(len(r["detections"]) for r in all_results)
+
+            summary = {
+                "total_images": num_images,
+                "average_inference_time_ms": avg_time,
+                "total_detections": total_detections,
+                "detections_per_image": total_detections / num_images,
+                "detailed_results": all_results,
+            }
+
+            # Save results
+            with open(results_path, "w") as f:
+                json.dump(summary, f, indent=2)
+
+            print("\nProcessing complete!")
+            print(f"Average inference time: {avg_time:.2f}ms")
+            print(f"Total detections: {total_detections}")
+            print(f"Results saved to: {results_path}")
+        else:
+            print("No images processed!")
+
     def save_results(self, results, image_path, output_dir):
         """Save inference results to a text file"""
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -123,97 +192,30 @@ class VisDroneInference:
                     f.write(f"xmax={xmax:.1f}, ymax={ymax:.1f}]\n\n")
 
 
-def parse_tfrecord(example_proto):
-    """Parse TFRecord containing only images"""
-    feature_description = {"image/encoded": tf.io.FixedLenFeature([], tf.string)}
-    return tf.io.parse_single_example(example_proto, feature_description)
-
-
-# def main():
-#     # Configuration
-#     MODEL_PATH = "visdrone_model_edge_tpu.tflite"
-#     IMAGE_DIR = "test_images"
-#     OUTPUT_DIR = "inference_results"
-
-#     # Create output directory
-#     os.makedirs(OUTPUT_DIR, exist_ok=True)
-
-#     # Initialize inference
-#     detector = VisDroneInference(MODEL_PATH)
-
-#     # Process all images in directory
-#     for image_file in os.listdir(IMAGE_DIR):
-#         if image_file.lower().endswith((".jpg", ".jpeg", ".png", ".bmp")):
-#             image_path = os.path.join(IMAGE_DIR, image_file)
-#             try:
-#                 print(f"Processing {image_file}...")
-#                 results = detector.run_inference(image_path)
-#                 detector.save_results(results, image_path, OUTPUT_DIR)
-#                 print(f"  Inference time: {results['inference_time']*1000:.2f}ms")
-#             except Exception as e:
-#                 print(f"Error processing {image_file}: {str(e)}")
-
-
 def main():
-    model_path = "visdrone_model_edge_tpu.tflite"
-    tfrecord_path = "path/to/test.tfrecord"
-    results_path = "output/inference_results.json"
+    # Configuration
+    MODEL_PATH = "visdrone_model_edge_tpu.tflite"
+    IMAGE_DIR = "test_images/VisDrone-test-challenge-sample-dataset"
+    OUTPUT_DIR = "inference_results"
 
-    detector = VisDroneInference(model_path)
-    dataset = tf.data.TFRecordDataset(tfrecord_path)
+    # Create output directory
+    os.makedirs(OUTPUT_DIR, exist_ok=True)
 
-    all_results = []
-    total_time = 0
-    num_images = 0
+    # Initialize inference
+    detector = VisDroneInference(MODEL_PATH)
 
-    for raw_record in dataset:
-        example = parse_tfrecord(raw_record)
-        results = detector.run_inference(example["image/encoded"].numpy())
-
-        # Filter confident detections
-        confident_detections = []
-        for box, cls_probs in zip(results["boxes"], results["classes"]):
-            confidence = np.max(cls_probs)
-            if confidence > 0.5:
-                class_id = np.argmax(cls_probs)
-                confident_detections.append(
-                    {
-                        "class": detector.CATEGORY_MAPPING[class_id],
-                        "confidence": float(confidence),
-                        "box": box.tolist(),
-                    }
-                )
-
-        all_results.append(
-            {
-                "image_id": num_images,
-                "inference_time_ms": results["inference_time"] * 1000,
-                "detections": confident_detections,
-            }
-        )
-
-        total_time += results["inference_time"]
-        num_images += 1
-
-    # Calculate statistics
-    avg_time = (total_time / num_images) * 1000  # Convert to ms
-    total_detections = sum(len(r["detections"]) for r in all_results)
-
-    summary = {
-        "total_images": num_images,
-        "average_inference_time_ms": avg_time,
-        "total_detections": total_detections,
-        "detections_per_image": total_detections / num_images,
-        "detailed_results": all_results,
-    }
-
-    with open(results_path, "w") as f:
-        json.dump(summary, f, indent=2)
-
-    print(f"Processed {num_images} images")
-    print(f"Average inference time: {avg_time:.2f}ms")
-    print(f"Total detections: {total_detections}")
-    print(f"Results saved to: {results_path}")
+    # # Process all images in directory
+    # for image_file in os.listdir(IMAGE_DIR):
+    #     if image_file.lower().endswith((".jpg", ".jpeg", ".png", ".bmp")):
+    #         image_path = os.path.join(IMAGE_DIR, image_file)
+    #         try:
+    #             print(f"Processing {image_file}...")
+    #             results = detector.run_inference(image_path)
+    #             detector.save_results(results, image_path, OUTPUT_DIR)
+    #             print(f"  Inference time: {results['inference_time']*1000:.2f}ms")
+    #         except Exception as e:
+    #             print(f"Error processing {image_file}: {str(e)}")
+    detector.process_directory(IMAGE_DIR, OUTPUT_DIR)
 
 
 if __name__ == "__main__":
