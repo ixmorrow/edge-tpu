@@ -41,97 +41,148 @@ class VisDroneInference:
         self.width = self.input_shape[2]
 
     def preprocess_image(self, image_path):
-        """Preprocess image for model input"""
-        # Load and resize image
-        image = Image.open(image_path)
-        image = image.convert("RGB")
-        image = image.resize((self.width, self.height))
+        """Preprocess image with improved error handling"""
+        try:
+            with Image.open(image_path) as img:
+                # Convert grayscale to RGB if needed
+                if img.mode != "RGB":
+                    img = img.convert("RGB")
 
-        # Convert to numpy array
-        image = np.array(image, dtype=np.uint8)
+                # Resize image
+                img = img.resize((320, 320), Image.Resampling.BILINEAR)
 
-        # Add batch dimension
-        image = np.expand_dims(image, axis=0)
-        return image
+                # Convert to numpy array
+                img_array = np.array(img)
+
+                # Add batch dimension and ensure uint8 type
+                input_data = np.expand_dims(img_array, axis=0).astype(np.uint8)
+
+                return input_data
+
+        except Exception as e:
+            print(f"Error preprocessing image {image_path}: {str(e)}")
+            print("Image details:")
+            try:
+                with Image.open(image_path) as img:
+                    print(f"  Mode: {img.mode}")
+                    print(f"  Size: {img.size}")
+                    print(f"  Format: {img.format}")
+            except Exception as inner_e:
+                print(f"  Unable to read image details: {str(inner_e)}")
+            raise
 
     def run_inference(self, image_path):
-        """Run inference on a single image"""
-        # Time the inference
-        start_time = time.perf_counter()
+        """Run inference with detailed error reporting"""
+        try:
+            # Preprocess image
+            input_data = self.preprocess_image(image_path)
 
-        # Preprocess image
-        input_data = self.preprocess_image(image_path)
+            # Time the inference
+            start_time = time.perf_counter()
 
-        # Set input tensor
-        self.interpreter.set_tensor(self.input_details[0]["index"], input_data)
+            # Set input tensor
+            self.interpreter.set_tensor(self.input_details[0]["index"], input_data)
 
-        # Run inference
-        self.interpreter.invoke()
+            # Run inference
+            self.interpreter.invoke()
 
-        # Get output tensors
-        boxes = self.interpreter.get_tensor(self.output_details[0]["index"])
-        labels = self.interpreter.get_tensor(self.output_details[1]["index"])
+            # Get inference time
+            inference_time = time.perf_counter() - start_time
 
-        inference_time = time.perf_counter() - start_time
+            # Get outputs
+            boxes = self.interpreter.get_tensor(self.output_details[0]["index"])[0]
+            classes = self.interpreter.get_tensor(self.output_details[1]["index"])[0]
 
-        return {"boxes": boxes, "labels": labels, "inference_time": inference_time}
+            return {
+                "boxes": boxes,
+                "classes": classes,
+                "inference_time": inference_time,
+            }
+
+        except Exception as e:
+            print(f"Detailed error for {image_path}:")
+            print(f"  Error type: {type(e).__name__}")
+            print(f"  Error message: {str(e)}")
+            if hasattr(e, "errno"):
+                print(f"  Error number: {e.errno}")
+            raise
 
     def process_directory(self, image_dir, results_path):
-        """Process all images in a directory"""
+        """Process all images in directory with error tracking"""
         all_results = []
         total_time = 0
         num_images = 0
+        failed_images = []
 
-        # Process each image in directory
-        for filename in os.listdir(image_dir):
-            if filename.lower().endswith((".png", ".jpg", ".jpeg")):
-                image_path = os.path.join(image_dir, filename)
-                try:
-                    results = self.run_inference(image_path)
+        # Get total number of images
+        image_files = [
+            f
+            for f in os.listdir(image_dir)
+            if f.lower().endswith((".png", ".jpg", ".jpeg"))
+        ]
+        total_images = len(image_files)
 
-                    # Filter confident detections
-                    confident_detections = []
-                    for box, cls_probs in zip(results["boxes"], results["labels"]):
-                        confidence = np.max(cls_probs)
-                        if confidence > 0.5:
-                            class_id = np.argmax(cls_probs)
-                            confident_detections.append(
-                                {
-                                    "class": self.CATEGORY_MAPPING[class_id],
-                                    "confidence": float(confidence),
-                                    "box": box.tolist(),
-                                }
-                            )
+        print(f"Starting processing of {total_images} images...")
 
-                    # Record results
-                    all_results.append(
-                        {
-                            "image": filename,
-                            "inference_time_ms": results["inference_time"] * 1000,
-                            "detections": confident_detections,
-                        }
-                    )
+        for filename in image_files:
+            image_path = os.path.join(image_dir, filename)
+            try:
+                # Run inference
+                results = self.run_inference(image_path)
 
-                    total_time += results["inference_time"]
-                    num_images += 1
+                # Filter confident detections
+                confident_detections = []
+                for box, cls_probs in zip(results["boxes"], results["classes"]):
+                    confidence = np.max(cls_probs)
+                    if confidence > 0.5:
+                        class_id = np.argmax(cls_probs)
+                        confident_detections.append(
+                            {
+                                "class": self.CATEGORY_MAPPING[class_id],
+                                "confidence": float(confidence),
+                                "box": box.tolist(),
+                            }
+                        )
 
-                    print(
-                        f"Processed {filename}: {len(confident_detections)} detections"
-                    )
+                # Record results
+                all_results.append(
+                    {
+                        "image": filename,
+                        "inference_time_ms": results["inference_time"] * 1000,
+                        "detections": confident_detections,
+                    }
+                )
 
-                except Exception as e:
-                    print(f"Error processing {filename}: {str(e)}")
+                total_time += results["inference_time"]
+                num_images += 1
 
-        # Calculate summary statistics
+                # Print progress
+                print(
+                    f"Processed {num_images}/{total_images}: {filename} - "
+                    f"Found {len(confident_detections)} objects in "
+                    f"{results['inference_time']*1000:.1f}ms"
+                )
+
+            except Exception as e:
+                failed_images.append(
+                    {"image": filename, "error": str(e), "error_type": type(e).__name__}
+                )
+                print(f"Failed to process {filename}: {str(e)}")
+                continue
+
+        # Calculate statistics
         if num_images > 0:
-            avg_time = (total_time / num_images) * 1000  # Convert to ms
+            avg_time = (total_time / num_images) * 1000
             total_detections = sum(len(r["detections"]) for r in all_results)
 
             summary = {
-                "total_images": num_images,
+                "total_images": total_images,
+                "processed_images": num_images,
+                "failed_images": len(failed_images),
                 "average_inference_time_ms": avg_time,
                 "total_detections": total_detections,
                 "detections_per_image": total_detections / num_images,
+                "failed_images_list": failed_images,
                 "detailed_results": all_results,
             }
 
@@ -140,11 +191,20 @@ class VisDroneInference:
                 json.dump(summary, f, indent=2)
 
             print("\nProcessing complete!")
+            print(f"Successfully processed: {num_images}/{total_images} images")
+            print(f"Failed to process: {len(failed_images)} images")
             print(f"Average inference time: {avg_time:.2f}ms")
             print(f"Total detections: {total_detections}")
             print(f"Results saved to: {results_path}")
-        else:
-            print("No images processed!")
+
+            # Save failed images list separately
+            if failed_images:
+                failed_images_path = results_path.replace(
+                    ".json", "_failed_images.json"
+                )
+                with open(failed_images_path, "w") as f:
+                    json.dump(failed_images, f, indent=2)
+                print(f"Failed images list saved to: {failed_images_path}")
 
     def save_results(self, results, image_path, output_dir):
         """Save inference results to a text file"""
