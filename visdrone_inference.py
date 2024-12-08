@@ -49,7 +49,7 @@ class VisDroneInference:
                     img = img.convert("RGB")
 
                 # Resize image
-                img = img.resize((320, 320), Image.Resampling.BILINEAR)
+                img = img.resize((320, 320), Image.BILINEAR)
 
                 # Convert to numpy array
                 img_array = np.array(img)
